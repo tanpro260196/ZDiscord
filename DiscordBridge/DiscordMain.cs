@@ -89,7 +89,7 @@ namespace DiscordBridge
 
 		private void OnPlayerCommand(PlayerCommandEventArgs args)
 		{
-			if (!args.CommandName.Equals("password") && !args.CommandName.Equals("login") && !args.CommandName.Equals("logout") && !args.CommandName.Equals("me"))
+			if (!args.CommandName.Equals("password") && !args.CommandName.Equals("login") && !args.CommandName.Equals("logout") && !args.CommandName.Equals("me") && !args.CommandName.Equals("register"))
 				Discord.SendLog($"{args.Player.Name} executed: {args.CommandPrefix}{args.CommandText}");
 
 			if (args.CommandName.Equals("me"))

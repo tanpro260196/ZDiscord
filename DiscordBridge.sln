@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBridge", "DiscordBridge\DiscordBridge.csproj", "{2405C152-37B9-42C0-8C69-0E9AC34432AD}"
 EndProject
@@ -34,10 +34,10 @@ Global
 		{2405C152-37B9-42C0-8C69-0E9AC34432AD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2405C152-37B9-42C0-8C69-0E9AC34432AD}.Release|x86.ActiveCfg = Release|Any CPU
 		{2405C152-37B9-42C0-8C69-0E9AC34432AD}.Release|x86.Build.0 = Release|Any CPU
-		{DEB42A50-6F4B-4E59-8D62-25CD36F189DE}.Debug|Any CPU.ActiveCfg = Release|x86
-		{DEB42A50-6F4B-4E59-8D62-25CD36F189DE}.Debug|x86.ActiveCfg = Release|x86
-		{DEB42A50-6F4B-4E59-8D62-25CD36F189DE}.Release|Any CPU.ActiveCfg = Release|x86
-		{DEB42A50-6F4B-4E59-8D62-25CD36F189DE}.Release|x86.ActiveCfg = Release|x86
+		{DEB42A50-6F4B-4E59-8D62-25CD36F189DE}.Debug|Any CPU.ActiveCfg = Release
+		{DEB42A50-6F4B-4E59-8D62-25CD36F189DE}.Debug|x86.ActiveCfg = Release
+		{DEB42A50-6F4B-4E59-8D62-25CD36F189DE}.Release|Any CPU.ActiveCfg = Release
+		{DEB42A50-6F4B-4E59-8D62-25CD36F189DE}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
