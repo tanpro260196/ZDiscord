@@ -68,6 +68,7 @@ namespace DiscordBridge
 			if (player == null || !player.Active || string.IsNullOrWhiteSpace(player.Name))
 				return;
 
+			Discord.Send($"{player.Name} has joined.");
 			Discord.SendLog($"{player.Name} has joined. IP: {player.IP}");
 		}
 
@@ -78,6 +79,7 @@ namespace DiscordBridge
 			if (player == null || !player.Active || string.IsNullOrWhiteSpace(player.Name))
 				return;
 
+			Discord.Send($"{player.Name} has left.");
 			Discord.SendLog($"{player.Name} has left. IP: {player.IP}");
 		}
 
