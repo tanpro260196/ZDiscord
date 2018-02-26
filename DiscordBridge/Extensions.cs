@@ -19,6 +19,9 @@ namespace DiscordBridge
 		private static readonly Regex MentionRegex
 			= new Regex(@"<@!{0,1}(\d{18})>", RegexOptions.Compiled);
 
+		private static readonly Regex ReverseMentionRegex
+			= new Regex(@"@(\S+)", RegexOptions.Compiled);
+
 		public static List<string> ParseParameters(this string input)
 		{
 			var ret = new List<string>();
@@ -90,6 +93,15 @@ namespace DiscordBridge
 
 			string ReplaceString(Capture match)
 			  => match.Value.Substring(match.Value.IndexOf(':') + 1).TrimEnd(']');
+		}
+
+		public static string ReverseFormat(this string text)
+		{
+			if (!DiscordMain.Config.AllowPinging)
+				return text;
+			if (!text.Contains("@"))
+				return text;
+			return ReverseMentionRegex.Replace(text, e => Discord.GetId(e.Groups[1].Value) != 0 ? $"<@{Discord.GetId(e.Groups[1].Value)}>" : $"@{e.Groups[1].Value}");
 		}
 	}
 }

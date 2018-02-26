@@ -22,6 +22,9 @@ namespace DiscordBridge
 		//Channel ID for the bot to send log messages - optional
 		public ulong LogChannelID;
 
+		//Allows pinging from in-game users
+		public bool AllowPinging;
+
 		//Will not relay messages from these IDs
 		public List<ulong> IgnoredDiscordIDs;
 
@@ -51,6 +54,7 @@ namespace DiscordBridge
 		{
 			return new Config()
 			{
+				AllowPinging = false,
 				BotPrefix = "!",
 				BotToken = "aaabbbccc",
 				ChannelID = 101010101010101010,

@@ -109,7 +109,7 @@ namespace DiscordBridge
 			// Broadcast chat messages
 			if (!isCommand)
 			{
-				TShock.Utils.Broadcast($"(Discord) {tshockGroup.Prefix}{GetName(args.Author.Id)}: {args.Content}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
+				TShock.Utils.Broadcast($"(Discord) {tshockGroup.Prefix}{GetName(args.Author.Id)}: {args.Content.ParseText()}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
 				return Task.CompletedTask;
 			}
 
@@ -237,6 +237,24 @@ namespace DiscordBridge
 			if (user == null)
 				return "UnknownUser";
 			return user.Nickname ?? user.Username;
+		}
+
+		public static ulong GetId(string name)
+		{
+			var nicknameUser = client.GetGuild(DiscordMain.Config.GuildID).Users.FirstOrDefault(e => e.Nickname != null && e.Nickname.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+
+			if (nicknameUser != null)
+			{
+				return nicknameUser.Id;
+			}
+			else
+			{
+				var usernameUser = client.GetGuild(DiscordMain.Config.GuildID).Users.FirstOrDefault(e => e.Username.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+				if (usernameUser == null)
+					return 0;
+				else
+					return usernameUser.Id;
+			}
 		}
 		#endregion
 	}
