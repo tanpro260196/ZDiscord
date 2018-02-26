@@ -19,6 +19,9 @@ namespace DiscordBridge
 		private static readonly Regex MentionRegex
 			= new Regex(@"<@!{0,1}(\d{18})>", RegexOptions.Compiled);
 
+		private static readonly Regex EmoteRegex
+			= new Regex(@"<a?:(\w+):\d+>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
 		private static readonly Regex ReverseMentionRegex
 			= new Regex(@"@(\S+)", RegexOptions.Compiled);
 
@@ -87,6 +90,8 @@ namespace DiscordBridge
 				  => int.TryParse(m.Groups[1].Value, out var item)
 					? $"`{TShock.Utils.GetItemById(item).Name}`"
 					: $"`{m.Groups[1].Value}`").Replace("``", "` `");
+
+				str = EmoteRegex.Replace(str, e => $":{e.Groups[1].Value}:");
 
 				return MentionRegex.Replace(str, m => $"@{Discord.GetName(ulong.Parse(m.Groups[1].Value))}");
 			}
