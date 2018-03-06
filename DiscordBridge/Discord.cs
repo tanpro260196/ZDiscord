@@ -69,7 +69,7 @@ namespace DiscordBridge
 					LogEnabled = true;
 
 				TShock.Log.Info("Connected to Discord!");
-                Discord.client.SetGameAsync("Terraria", "https://terraria.org");
+                		Discord.client.SetGameAsync("Terraria", "https://terraria.org");
 				Send($"Connected!");
 			}
 
