@@ -70,8 +70,8 @@ namespace DiscordBridge
 			if (player == null || !player.Active || string.IsNullOrWhiteSpace(player.Name))
 				return;
 
-			Discord.Send($"{player.Name} has joined.");
-			Discord.SendLog($"{player.Name} has joined. IP: {player.IP}");
+			Discord.Send($"```yaml{Environment.NewLine}{player.Name} has joined.```");
+			Discord.SendLog($"```yaml{Environment.NewLine}{player.Name} has joined. IP: {player.IP}```");
 		}
 
 		private void OnServerChat(ServerChatEventArgs args)
@@ -92,8 +92,8 @@ namespace DiscordBridge
 			if (player == null || !player.Active || string.IsNullOrWhiteSpace(player.Name))
 				return;
 
-			Discord.Send($"{player.Name} has left.");
-			Discord.SendLog($"{player.Name} has left. IP: {player.IP}");
+			Discord.Send($"```yaml{Environment.NewLine}{player.Name} has left.```");
+			Discord.SendLog($"```yaml{Environment.NewLine}{player.Name} has left. IP: {player.IP}```");
 		}
 
 		private void OnPlayerChat(PlayerChatEventArgs args)
@@ -105,7 +105,7 @@ namespace DiscordBridge
 		private void OnPlayerCommand(PlayerCommandEventArgs args)
 		{
 			if (!args.CommandName.Equals("password") && !args.CommandName.Equals("login") && !args.CommandName.Equals("logout") && !args.CommandName.Equals("me") && !args.CommandName.Equals("register"))
-				Discord.SendLog($"{args.Player.Name} executed: {args.CommandPrefix}{args.CommandText}");
+				Discord.SendLog($"```yaml{Environment.NewLine}{args.Player.Name} executed: {args.CommandPrefix}{args.CommandText}```");
 
 			if (args.CommandName.Equals("me"))
 				Discord.Send($"* {args.Player.Name} {args.CommandText.Substring(3)}");
@@ -113,12 +113,12 @@ namespace DiscordBridge
 
 		private void OnPlayerPostLogin(PlayerPostLoginEventArgs args)
 		{
-			Discord.SendLog($"User {args.Player.User.Name} has logged in as {args.Player.Name} of group {args.Player.Group.Prefix}");
+			Discord.SendLog($"```yaml{Environment.NewLine}Player {args.Player.User.Name} has logged in as user {args.Player.Name} of group [{args.Player.Group.Name}]```");
 		}
 
 		private void OnPlayerLogout(PlayerLogoutEventArgs args)
 		{
-			Discord.SendLog($"{args.Player.Name} has logged out.");
+			Discord.SendLog($"```yaml{Environment.NewLine}{args.Player.Name} has logged out.```");
 		}
 		#endregion
 	}

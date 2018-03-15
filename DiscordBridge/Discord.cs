@@ -70,7 +70,7 @@ namespace DiscordBridge
 
 				TShock.Log.Info("Connected to Discord!");
                 		Discord.client.SetGameAsync("Terraria", "https://terraria.org");
-				Send($"Connected!");
+				Send($"```yaml{Environment.NewLine} Server Online. Chat Relay Ready!```");
 			}
 
 			return Task.CompletedTask;
@@ -202,7 +202,7 @@ namespace DiscordBridge
 									if (player.GetOutput().Count == 0)
 										return Task.CompletedTask;
 
-									args.Channel.SendMessageAsync($"```{string.Join("\n", player.GetOutput())}```");
+									args.Channel.SendMessageAsync($"```css{Environment.NewLine}{string.Join("\n", player.GetOutput())}```");
 								}
 						}
 						else
