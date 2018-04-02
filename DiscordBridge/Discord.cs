@@ -70,7 +70,7 @@ namespace DiscordBridge
 
 				TShock.Log.Info("Connected to Discord!");
                 		Discord.client.SetGameAsync("Terraria", "https://terraria.org");
-				Send($"```yaml{Environment.NewLine} Server Online. Chat Relay Ready!```");
+				Send($"```yaml{Environment.NewLine}Server Online. Chat Relay Ready!```");
 			}
 
 			return Task.CompletedTask;
