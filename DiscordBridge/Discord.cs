@@ -70,7 +70,7 @@ namespace DiscordBridge
 
 				TShock.Log.Info("Connected to Discord!");
                 		Discord.client.SetGameAsync("Terraria", "https://terraria.org");
-				Send($"```yaml{Environment.NewLine}Server Online. Chat Relay Ready!```");
+				Send($"Server Online.");
 			}
 
 			return Task.CompletedTask;
@@ -82,19 +82,16 @@ namespace DiscordBridge
 				return Task.CompletedTask;
 			if (string.IsNullOrWhiteSpace(args.Content))
 				return Task.CompletedTask;
-			if (args.Author.IsBot)
+			if (args.Author.IsBot && args.Author.Discriminator != "6404")
 				return Task.CompletedTask;
 			if (DiscordMain.Config.IgnoredDiscordIDs.Contains(args.Author.Id))
 				return Task.CompletedTask;
 
 			//Metadata part 1
 			bool isDirectMessage = args.Channel is IDMChannel;
-			bool isCommand = isDirectMessage || args.Content.StartsWith(DiscordMain.Config.BotPrefix);
-			bool isInMainChannel = args.Channel.Id == DiscordMain.Config.ChannelID;
-
-			//Ignore messages that aren't commands or from main chat channel
-			if (!isCommand && !isInMainChannel)
-				return Task.CompletedTask;
+            bool isCommand = isDirectMessage || args.Content.StartsWith(DiscordMain.Config.BotPrefix);
+            bool isInMainChannel = args.Channel.Id == DiscordMain.Config.ChannelID;
+            
 
 			//Metadata part 2
 			int tShockUserId = DB.GetTShockID(args.Author.Id);
@@ -102,19 +99,29 @@ namespace DiscordBridge
 			var discordUser = guild.GetUser(args.Author.Id);
 			var tshockUser = TShock.Users.GetUserByID(tShockUserId);
 			var tshockGroup = TShock.Groups.GetGroupByName(tshockUser != null ? tshockUser.Group : TShock.Config.DefaultGuestGroupName);
+            // Broadcast chat messages
+            if ((!isCommand) && !args.Author.IsBot)
+            {
+                TShock.Utils.Broadcast($"(Discord) {tshockGroup.Prefix}{GetName(args.Author.Id)}: {args.Content.ParseText()}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
+                return Task.CompletedTask;
+            }
+            if ((!isCommand) && args.Author.IsBot)
+            {
+                TShock.Utils.Broadcast($"{args.Content.ParseText().Replace("*", string.Empty)}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
+                return Task.CompletedTask;
+            }
+            //Ignore messages that aren't commands or from main chat channel
+            if (!isCommand && !isInMainChannel)
+                return Task.CompletedTask;
 
-			//If someone DMs bot without being in guild
-			if (discordUser == null)
+            //If someone DMs bot without being in guild
+            if (discordUser == null)
 				return Task.CompletedTask;
+            
+            
 
-			// Broadcast chat messages
-			if (!isCommand)
-			{
-				TShock.Utils.Broadcast($"(Discord) {tshockGroup.Prefix}{GetName(args.Author.Id)}: {args.Content.ParseText()}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
-				return Task.CompletedTask;
-			}
 
-			string commandText = args.Content.StartsWith(DiscordMain.Config.BotPrefix) ? args.Content.Substring(DiscordMain.Config.BotPrefix.Length).ParseText() : args.Content.ParseText();
+            string commandText = args.Content.StartsWith(DiscordMain.Config.BotPrefix) ? args.Content.Substring(DiscordMain.Config.BotPrefix.Length).ParseText() : args.Content.ParseText();
 			List<string> commandParameters = commandText.ParseParameters();
 
 			//Override certain commands for Discord use

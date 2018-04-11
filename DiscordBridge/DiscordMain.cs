@@ -70,7 +70,7 @@ namespace DiscordBridge
 			if (player == null || !player.Active || string.IsNullOrWhiteSpace(player.Name))
 				return;
 
-			Discord.Send($"```yaml{Environment.NewLine}{player.Name} has joined.```");
+			Discord.Send($"```{Environment.NewLine}{player.Name} has joined.```");
 			Discord.SendLog($"```yaml{Environment.NewLine}{player.Name} has joined. IP: {player.IP}```");
 		}
 
@@ -92,7 +92,7 @@ namespace DiscordBridge
 			if (player == null || !player.Active || string.IsNullOrWhiteSpace(player.Name))
 				return;
 
-			Discord.Send($"```yaml{Environment.NewLine}{player.Name} has left.```");
+			Discord.Send($"```{Environment.NewLine}{player.Name} has left.```");
 			Discord.SendLog($"```yaml{Environment.NewLine}{player.Name} has left. IP: {player.IP}```");
 		}
 
@@ -105,7 +105,7 @@ namespace DiscordBridge
 		private void OnPlayerCommand(PlayerCommandEventArgs args)
 		{
 			if (!args.CommandName.Equals("password") && !args.CommandName.Equals("login") && !args.CommandName.Equals("logout") && !args.CommandName.Equals("me") && !args.CommandName.Equals("register"))
-				Discord.SendLog($"```yaml{Environment.NewLine}{args.Player.Name} executed: {args.CommandPrefix}{args.CommandText}```");
+				Discord.SendLog($"```{args.Player.Name} executed: {args.CommandPrefix}{args.CommandText}```");
 
 			if (args.CommandName.Equals("me"))
 				Discord.Send($"* {args.Player.Name} {args.CommandText.Substring(3)}");
