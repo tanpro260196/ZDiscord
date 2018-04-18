@@ -82,7 +82,7 @@ namespace DiscordBridge
 				return Task.CompletedTask;
 			if (string.IsNullOrWhiteSpace(args.Content))
 				return Task.CompletedTask;
-			if (args.Author.IsBot && args.Author.Discriminator != "6404")
+			if (args.Author.IsBot && args.Author.Discriminator != "6404" && args.Author.Discriminator != "0000")
 				return Task.CompletedTask;
 			if (DiscordMain.Config.IgnoredDiscordIDs.Contains(args.Author.Id))
 				return Task.CompletedTask;
@@ -107,7 +107,7 @@ namespace DiscordBridge
             }
             if ((!isCommand) && args.Author.IsBot)
             {
-                TShock.Utils.Broadcast($"{args.Content.ParseText().Replace("*", string.Empty)}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
+                TShock.Utils.Broadcast($"(Msg) {args.Author.Username}: {args.Content.ParseText().Replace("*", string.Empty)}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
                 return Task.CompletedTask;
             }
             //Ignore messages that aren't commands or from main chat channel
