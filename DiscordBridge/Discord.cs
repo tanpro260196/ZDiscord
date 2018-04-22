@@ -99,6 +99,12 @@ namespace DiscordBridge
 			var discordUser = guild.GetUser(args.Author.Id);
 			var tshockUser = TShock.Users.GetUserByID(tShockUserId);
 			var tshockGroup = TShock.Groups.GetGroupByName(tshockUser != null ? tshockUser.Group : TShock.Config.DefaultGuestGroupName);
+
+            //Ignore messages that aren't commands or from main chat channel
+            if (!isCommand && !isInMainChannel)
+                return Task.CompletedTask;
+            
+
             // Broadcast chat messages
             if ((!isCommand) && !args.Author.IsBot)
             {
@@ -110,15 +116,12 @@ namespace DiscordBridge
                 TShock.Utils.Broadcast($"(Msg) {args.Author.Username}: {args.Content.ParseText().Replace("*", string.Empty)}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
                 return Task.CompletedTask;
             }
-            //Ignore messages that aren't commands or from main chat channel
-            if (!isCommand && !isInMainChannel)
-                return Task.CompletedTask;
 
             //If someone DMs bot without being in guild
             if (discordUser == null)
-				return Task.CompletedTask;
-            
-            
+                return Task.CompletedTask;
+
+
 
 
             string commandText = args.Content.StartsWith(DiscordMain.Config.BotPrefix) ? args.Content.Substring(DiscordMain.Config.BotPrefix.Length).ParseText() : args.Content.ParseText();
