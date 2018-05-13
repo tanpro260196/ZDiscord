@@ -113,7 +113,7 @@ namespace DiscordBridge
             }
             if ((!isCommand) && args.Author.IsBot)
             {
-                TShock.Utils.Broadcast($"(Msg) {args.Author.Username}: {args.Content.ParseText().Replace("*", string.Empty)}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
+                TShock.Utils.Broadcast($"[Messenger] {args.Author.Username}: {args.Content.ParseText().Replace("*", string.Empty)}", 0, 132, 255);
                 return Task.CompletedTask;
             }
 
@@ -187,7 +187,7 @@ namespace DiscordBridge
 
 						if (!player.HasPermission("discord.commands"))
 						{
-							args.Channel.SendMessageAsync("```You do not have permission to use commands on Discord.```");
+							args.Channel.SendMessageAsync("You do not have permission to use commands on Discord. Login with your TEARaria Account with `/login`");
 							return Task.CompletedTask;
 						}
 
@@ -204,7 +204,7 @@ namespace DiscordBridge
 								}
 								else if (!command.AllowServer)
 								{
-									args.Channel.SendMessageAsync("```You cannot run this command from Discord.```");
+									args.Channel.SendMessageAsync("```This command is only available in-game.```");
 								}
 								else
 								{
