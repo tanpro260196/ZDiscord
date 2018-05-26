@@ -108,7 +108,7 @@ namespace DiscordBridge
             // Broadcast chat messages
             if ((!isCommand) && !args.Author.IsBot)
             {
-                TShock.Utils.Broadcast($"(Discord) {tshockGroup.Prefix}{GetName(args.Author.Id)}: {args.Content.ParseText()}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
+                TShock.Utils.Broadcast($"[Discord] {tshockGroup.Prefix}{GetName(args.Author.Id)}: {args.Content.ParseText()}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
                 return Task.CompletedTask;
             }
             if ((!isCommand) && args.Author.IsBot)

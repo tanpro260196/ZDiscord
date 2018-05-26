@@ -30,7 +30,8 @@ namespace DiscordBridge
 			ServerApi.Hooks.NetGreetPlayer.Register(this, OnGreetPlayer);
 			ServerApi.Hooks.ServerChat.Register(this, OnServerChat);
 			ServerApi.Hooks.ServerLeave.Register(this, OnServerLeave);
-			PlayerHooks.PlayerChat += OnPlayerChat;
+            ServerApi.Hooks.GameUpdate.Register(this, OnUpdate);
+            PlayerHooks.PlayerChat += OnPlayerChat;
 			PlayerHooks.PlayerCommand += OnPlayerCommand;
 			PlayerHooks.PlayerPostLogin += OnPlayerPostLogin;
 			PlayerHooks.PlayerLogout += OnPlayerLogout;
@@ -44,7 +45,8 @@ namespace DiscordBridge
 				ServerApi.Hooks.NetGreetPlayer.Deregister(this, OnGreetPlayer);
 				ServerApi.Hooks.ServerChat.Deregister(this, OnServerChat);
 				ServerApi.Hooks.ServerLeave.Deregister(this, OnServerLeave);
-				PlayerHooks.PlayerChat -= OnPlayerChat;
+                ServerApi.Hooks.GameUpdate.Deregister(this, OnUpdate);
+                PlayerHooks.PlayerChat -= OnPlayerChat;
 				PlayerHooks.PlayerCommand -= OnPlayerCommand;
 				PlayerHooks.PlayerPostLogin -= OnPlayerPostLogin;
 				PlayerHooks.PlayerLogout -= OnPlayerLogout;
@@ -63,14 +65,28 @@ namespace DiscordBridge
 			Discord.InitializeAsync();
 		}
 
-		private void OnGreetPlayer(GreetPlayerEventArgs args)
+
+        private DateTime LastCheck = DateTime.UtcNow;
+        private Dictionary<string, int> TimeLeft = new Dictionary<string, int>();
+        public void OnUpdate(EventArgs args)
+        {
+            
+            if ((DateTime.UtcNow - LastCheck).TotalSeconds >= 3600)
+            {
+                LastCheck = DateTime.UtcNow;
+                Discord.InitializeAsync();
+            }
+            return;
+        }
+
+        private void OnGreetPlayer(GreetPlayerEventArgs args)
 		{
 			var player = TShock.Players[args.Who];
 
 			if (player == null || !player.Active || string.IsNullOrWhiteSpace(player.Name))
 				return;
 
-			Discord.Send($"```{Environment.NewLine}{player.Name} has joined.```");
+			Discord.Send($"```{player.Name} has joined.```");
 			Discord.SendLog($"```yaml{Environment.NewLine}{player.Name} has joined. IP: {player.IP}```");
 		}
 
@@ -92,7 +108,7 @@ namespace DiscordBridge
 			if (player == null || !player.Active || string.IsNullOrWhiteSpace(player.Name))
 				return;
 
-			Discord.Send($"```{Environment.NewLine}{player.Name} has left.```");
+			Discord.Send($"```{player.Name} has left.```");
 			Discord.SendLog($"```yaml{Environment.NewLine}{player.Name} has left. IP: {player.IP}```");
 		}
 
