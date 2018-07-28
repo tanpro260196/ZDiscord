@@ -74,7 +74,10 @@ namespace DiscordBridge
             if ((DateTime.UtcNow - LastCheck).TotalSeconds >= 3600)
             {
                 LastCheck = DateTime.UtcNow;
-                Discord.InitializeAsync();
+                if (Discord.AwaitingConnection)
+                {
+                    Discord.InitializeAsync();
+                }
             }
             return;
         }

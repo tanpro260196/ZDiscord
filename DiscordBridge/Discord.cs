@@ -82,8 +82,11 @@ namespace DiscordBridge
 				return Task.CompletedTask;
 			if (string.IsNullOrWhiteSpace(args.Content))
 				return Task.CompletedTask;
-			if (args.Author.IsBot && args.Author.Discriminator != "6404" && args.Author.Discriminator != "0000")
-				return Task.CompletedTask;
+
+            if (args.Author.IsBot && !DiscordMain.Config.WhiteListedBotID.Contains(args.Author.Discriminator))
+            {
+                    return Task.CompletedTask;
+            }
 			if (DiscordMain.Config.IgnoredDiscordIDs.Contains(args.Author.Id))
 				return Task.CompletedTask;
 
@@ -111,11 +114,40 @@ namespace DiscordBridge
                 TShock.Utils.Broadcast($"[Discord] {tshockGroup.Prefix}{GetName(args.Author.Id)}: {args.Content.ParseText()}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
                 return Task.CompletedTask;
             }
-            if ((!isCommand) && args.Author.IsBot)
+            if ((isCommand) && !args.Author.IsBot)
+            {
+                TShock.Utils.Broadcast($"[Discord] {tshockGroup.Prefix}{GetName(args.Author.Id)}: {args.Content.ParseText()}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
+                return Task.CompletedTask;
+            }
+            if (args.Author.IsBot && args.Author.Discriminator == "0000")
             {
                 TShock.Utils.Broadcast($"[Messenger] {args.Author.Username}: {args.Content.ParseText().Replace("*", string.Empty)}", 0, 132, 255);
                 return Task.CompletedTask;
             }
+
+            if (!isCommand && args.Author.IsBot && args.Author.Discriminator != DiscordMain.Config.botID)
+            {
+                if (!isCommand && args.Author.Discriminator == "0234" && !args.Content.ParseText().Replace("*", string.Empty).Contains("has joined.` ``") && !args.Content.ParseText().Replace("*", string.Empty).Contains("has left.` ``"))
+                {
+                    TShock.Utils.Broadcast($"[Server 1] {args.Content.ParseText().Replace("*", string.Empty)}", 000, 230, 020);
+                    return Task.CompletedTask;
+                }
+                else if (args.Content.ParseText().Replace("*", string.Empty).Contains("has joined.` ``") || args.Content.ParseText().Replace("*", string.Empty).Contains("has left.` ``"))
+                {
+                    return Task.CompletedTask;
+                }
+                if (!isCommand && args.Author.Discriminator == "0622" && !args.Content.ParseText().Replace("*", string.Empty).Contains("has joined.` ``") && !args.Content.ParseText().Replace("*", string.Empty).Contains("has left.` ``"))
+                {
+                    TShock.Utils.Broadcast($"[Server 2] {args.Content.ParseText().Replace("*", string.Empty)}", 000, 230, 020);
+                    return Task.CompletedTask;
+                }
+                else if (args.Content.ParseText().Replace("*", string.Empty).Contains("has joined.` ``") || args.Content.ParseText().Replace("*", string.Empty).Contains("has left.` ``"))
+                {
+                    return Task.CompletedTask;
+                }
+            }
+            if (args.Author.Discriminator == DiscordMain.Config.botID)
+                return Task.CompletedTask;
 
             //If someone DMs bot without being in guild
             if (discordUser == null)

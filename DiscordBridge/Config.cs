@@ -13,6 +13,9 @@ namespace DiscordBridge
 		//Prefix used for bot commands
 		public string BotPrefix;
 
+        //4-digits ID for the Bot account
+        public string botID;
+
 		//Guild ID for the bot to watch for commands
 		public ulong GuildID;
 
@@ -28,7 +31,10 @@ namespace DiscordBridge
 		//Will not relay messages from these IDs
 		public List<ulong> IgnoredDiscordIDs;
 
-		public static Config Read()
+        //Will relay messages from these Bots
+        public List<string> WhiteListedBotID;
+
+        public static Config Read()
 		{
 			string configPath = Path.Combine(TShock.SavePath, "discordConfig.json");
 			if (!File.Exists(configPath))
@@ -52,16 +58,18 @@ namespace DiscordBridge
 
 		private static Config Default()
 		{
-			return new Config()
-			{
-				AllowPinging = false,
-				BotPrefix = "!",
-				BotToken = "aaabbbccc",
-				ChannelID = 101010101010101010,
-				GuildID = 101010101010101010,
+            return new Config()
+            {
+                AllowPinging = false,
+                BotPrefix = "/",
+                BotToken = "aaabbbccc",
+                botID = "0234",
+				ChannelID = 432688657221156873,
+				GuildID = 304412012425904129,
 				IgnoredDiscordIDs = new List<ulong>() { 101010101010101010 },
-				LogChannelID = 101010101010101010
-			};
+                WhiteListedBotID = new List<string>() {"0000", "0234", "0622", "6404", "0769", "4876" },
+                LogChannelID = 447479526801408021
+            };
 		}
 	}
 }
