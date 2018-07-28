@@ -114,11 +114,6 @@ namespace DiscordBridge
                 TShock.Utils.Broadcast($"[Discord] {tshockGroup.Prefix}{GetName(args.Author.Id)}: {args.Content.ParseText()}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
                 return Task.CompletedTask;
             }
-            if ((isCommand) && !args.Author.IsBot)
-            {
-                TShock.Utils.Broadcast($"[Discord] {tshockGroup.Prefix}{GetName(args.Author.Id)}: {args.Content.ParseText()}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
-                return Task.CompletedTask;
-            }
             if (args.Author.IsBot && args.Author.Discriminator == "0000")
             {
                 TShock.Utils.Broadcast($"[Messenger] {args.Author.Username}: {args.Content.ParseText().Replace("*", string.Empty)}", 0, 132, 255);
