@@ -106,7 +106,6 @@ namespace DiscordBridge
             //Ignore messages that aren't commands or from main chat channel
             if (!isCommand && !isInMainChannel)
                 return Task.CompletedTask;
-            
 
             // Broadcast chat messages
             if ((!isCommand) && !args.Author.IsBot)
@@ -114,13 +113,13 @@ namespace DiscordBridge
                 TShock.Utils.Broadcast($"[Discord] {tshockGroup.Prefix}{GetName(args.Author.Id)}: {args.Content.ParseText()}", tshockGroup.R, tshockGroup.G, tshockGroup.B);
                 return Task.CompletedTask;
             }
-            if (args.Author.IsBot && args.Author.Discriminator == "0000")
+            if ((!isCommand) && args.Author.IsBot && args.Author.Discriminator == "0000")
             {
                 TShock.Utils.Broadcast($"[Messenger] {args.Author.Username}: {args.Content.ParseText().Replace("*", string.Empty)}", 0, 132, 255);
                 return Task.CompletedTask;
             }
 
-            if (!isCommand && args.Author.IsBot && args.Author.Discriminator != DiscordMain.Config.botID)
+            if (!isCommand && args.Author.IsBot && args.Author.Discriminator != DiscordMain.Config.botID && args.Author.Discriminator != "0000")
             {
                 if (!isCommand && args.Author.Discriminator == "0234" && !args.Content.ParseText().Replace("*", string.Empty).Contains("has joined.` ``") && !args.Content.ParseText().Replace("*", string.Empty).Contains("has left.` ``"))
                 {
@@ -145,9 +144,8 @@ namespace DiscordBridge
                 return Task.CompletedTask;
 
             //If someone DMs bot without being in guild
-            if (discordUser == null)
+            if (discordUser == null && args.Author.Discriminator != "0000")
                 return Task.CompletedTask;
-
 
 
 
@@ -166,8 +164,11 @@ namespace DiscordBridge
 							args.DeleteAsync();
 						}
 						catch { }
-						args.Channel.SendMessageAsync("```You can only login via Direct Message with me!```");
-						return Task.CompletedTask;
+                        if (args.Author.Discriminator != "0000")
+                        { args.Channel.SendMessageAsync("```You can only login via Direct Message with me!```"); }
+                        else if (args.Author.Discriminator == "0000")
+                        { args.Channel.SendMessageAsync("```You cannot only login via Messenger! Please use Discord.```"); }
+                        return Task.CompletedTask;
 					}
 					if (tshockUser != null)
 					{
@@ -189,13 +190,16 @@ namespace DiscordBridge
 					args.Channel.SendMessageAsync("```Login successful!```");
 					break;
 				case "logout":
-					if (tshockUser == null)
-					{
-						args.Channel.SendMessageAsync("```You are not logged in!```");
-						return Task.CompletedTask;
-					}
-					DB.RemoveTShockUser(args.Author.Id);
-					args.Channel.SendMessageAsync("```Logout successful!```");
+                    if (args.Author.Discriminator != "0000")
+                    {
+                        if (tshockUser == null)
+                        {
+                            args.Channel.SendMessageAsync("```You are not logged in!```");
+                            return Task.CompletedTask;
+                        }
+                        DB.RemoveTShockUser(args.Author.Id);
+                        args.Channel.SendMessageAsync("```Logout successful!```");
+                    }
 					break;
 				case "who":
 				case "online":
@@ -207,12 +211,17 @@ namespace DiscordBridge
 						TShock.Utils.Broadcast($"* {GetName(args.Author.Id)} {commandText.Substring(3)}", 205, 133, 63);
 					break;
 				default:
-					using (var player = new DiscordPlayer(GetName(args.Author.Id)))
+                    if (args.Author.Discriminator == "0000")
+                    {
+                            args.Channel.SendMessageAsync("```You cannot use command in Messenger due to Facebook being a dick. Please use Discord.```");
+                            return Task.CompletedTask;
+                    }
+                    using (var player = new DiscordPlayer(GetName(args.Author.Id)))
 					{
 						player.User = tshockUser;
 						player.Group = tshockGroup;
 
-						if (!player.HasPermission("discord.commands"))
+						if (!player.HasPermission("discord.commands") )
 						{
 							args.Channel.SendMessageAsync("You do not have permission to use commands on Discord. Login with your TEARaria Account with `/login`");
 							return Task.CompletedTask;
