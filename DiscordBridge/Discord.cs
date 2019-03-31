@@ -118,6 +118,11 @@ namespace DiscordBridge
                 TShock.Utils.Broadcast($"[Messenger] {args.Author.Username}: {args.Content.ParseText().Replace("*", string.Empty)}", 0, 132, 255);
                 return Task.CompletedTask;
             }
+            if ((!isCommand) && args.Author.IsBot && args.Author.Discriminator == "6404")
+            {
+                TShock.Utils.Broadcast($"[Messenger] {args.Content.ParseText().Replace("*", string.Empty)}", 0, 132, 255);
+                return Task.CompletedTask;
+            }
 
             if (!isCommand && args.Author.IsBot && args.Author.Discriminator != DiscordMain.Config.botID && args.Author.Discriminator != "0000")
             {
