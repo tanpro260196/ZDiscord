@@ -29,7 +29,8 @@ namespace DiscordBridge
 			ServerApi.Hooks.GameInitialize.Register(this, OnInitialize);
 			ServerApi.Hooks.NetGreetPlayer.Register(this, OnGreetPlayer);
 			ServerApi.Hooks.ServerChat.Register(this, OnServerChat);
-			ServerApi.Hooks.ServerLeave.Register(this, OnServerLeave);
+
+            ServerApi.Hooks.ServerLeave.Register(this, OnServerLeave);
             ServerApi.Hooks.GameUpdate.Register(this, OnUpdate);
             PlayerHooks.PlayerChat += OnPlayerChat;
 			PlayerHooks.PlayerCommand += OnPlayerCommand;
@@ -93,13 +94,14 @@ namespace DiscordBridge
 			Discord.SendLog($"```yaml{Environment.NewLine}{player.Name} has joined. IP: {player.IP}```");
 		}
 
-		private void OnServerChat(ServerChatEventArgs args)
+        
+        private void OnServerChat(ServerChatEventArgs args)
 		{
 			var player = TShock.Players[args.Who];
 
 			if (player == null || !player.Active || string.IsNullOrWhiteSpace(player.Name))
 				return;
-
+            
 			if (args.CommandId._name.Equals("Emote"))
 				Discord.Send($"* {player.Name} {args.Text}");
 		}
@@ -118,7 +120,8 @@ namespace DiscordBridge
 		private void OnPlayerChat(PlayerChatEventArgs args)
 		{
 			if (!args.Player.mute)
-				Discord.Send($"{args.TShockFormattedText.ReverseFormat()}");
+				Discord.Send($"{args.TShockFormattedText.StripTags()}");
+            
 		}
 
 		private void OnPlayerCommand(PlayerCommandEventArgs args)
