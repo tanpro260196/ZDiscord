@@ -103,7 +103,7 @@ namespace DiscordBridge
 				return;
             
 			if (args.CommandId._name.Equals("Emote"))
-				Discord.Send($"* {player.Name} {args.Text}");
+				Discord.Send($"* {player.Name} {args.Text.StripTags()}");
 		}
 
 		private void OnServerLeave(LeaveEventArgs args)

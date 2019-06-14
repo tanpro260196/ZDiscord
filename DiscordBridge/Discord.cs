@@ -258,7 +258,7 @@ namespace DiscordBridge
                                     if (player.GetOutput().Count == 0)
                                         return Task.CompletedTask;
 
-                                    args.Channel.SendMessageAsync($"```{string.Join("\n", player.GetOutput())}```");
+                                    args.Channel.SendMessageAsync($"```{string.Join("\n", player.GetOutput()).StripTags()}```");
                                 }
                         }
                         else

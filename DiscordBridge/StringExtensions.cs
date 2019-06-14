@@ -92,9 +92,9 @@ namespace DiscordBridge
                         Item item = TShock.Utils.GetItemFromTag(_raw);
                         string stack = item.stack > 1 ? $"{item.stack} " : "";
                         if (quotes)
-                            return $"`[{stack}{item.AffixName()}] `";
+                            return $"` -{stack}{item.AffixName()}- `";
                         else
-                            return $"[{stack}{item.AffixName()}] ";
+                            return $"{stack}{item.AffixName()}, ";
                 }
             }
 
