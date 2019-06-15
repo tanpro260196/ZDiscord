@@ -29,7 +29,7 @@ namespace DiscordBridge
 			ServerApi.Hooks.GameInitialize.Register(this, OnInitialize);
 			ServerApi.Hooks.NetGreetPlayer.Register(this, OnGreetPlayer);
 			ServerApi.Hooks.ServerChat.Register(this, OnServerChat);
-
+            
             ServerApi.Hooks.ServerLeave.Register(this, OnServerLeave);
             ServerApi.Hooks.GameUpdate.Register(this, OnUpdate);
             PlayerHooks.PlayerChat += OnPlayerChat;
@@ -104,6 +104,7 @@ namespace DiscordBridge
             
 			if (args.CommandId._name.Equals("Emote"))
 				Discord.Send($"* {player.Name} {args.Text.StripTags()}");
+            
 		}
 
 		private void OnServerLeave(LeaveEventArgs args)
@@ -131,7 +132,9 @@ namespace DiscordBridge
 
 			if (args.CommandName.Equals("me"))
 				Discord.Send($"* {args.Player.Name} {args.CommandText.Substring(3)}");
-		}
+            if (args.CommandName.Equals("broadcast") || args.CommandName.Equals("bc") || args.CommandName.Equals("say"))
+                Discord.Send($"(Server Broadcast) {string.Join(" ", args.Parameters)}");
+        }
 
 		private void OnPlayerPostLogin(PlayerPostLoginEventArgs args)
 		{
